@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+  # API Server
+  clearml-apiserver:
+    image: allegroai/clearml:latest
+    container_name: clearml-apiserver
+    ports:
+      - "9008:8008"  # API Server port
+    environment:
+      - CLEARML_SERVER_TYPE=apiserver
+    volumes:
+      - clearml_data:/opt/clearml/data
+    platform: linux/amd64
+
+  # Web Server
+  clearml-webserver:
+    image: allegroai/clearml:latest
+    container_name: clearml-webserver
+    ports:
+      - "9080:8080"  # Web UI port
+    environment:
+      - CLEARML_API_HOST=http://clearml-apiserver:8008  # Connects to API server
+      - CLEARML_SERVER_TYPE=webserver
+    depends_on:
+      - clearml-apiserver  # Ensure API server is up before the web server
+    platform: linux/amd64
+
+  # File Server
+  clearml-fileserver:
+    image: allegroai/clearml:latest
+    container_name: clearml-fileserver
+    ports:
+      - "9081:8081"  # File server port
+    environment:
+      - CLEARML_API_HOST=http://clearml-apiserver:8008  # Connects to API server
+      - CLEARML_SERVER_TYPE=fileserver
+    depends_on:
+      - clearml-apiserver  # Ensure API server is up before the file server
+    platform: linux/amd64
+
+
+  app:
+    build: ./app  # Make sure to have a Dockerfile in the 'app' directory for configuring your Python environment
+    container_name: app
+    ports:
+      - "8000:8000"  # Expose your application port
+    volumes:
+      - ./app:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - HUGGINGFACE_HUB_API_TOKEN=<your_huggingface_token>  # Replace or set via an env variable for security
+    depends_on:
+      - mongodb
+      - qdrant
+      - clearml-apiserver
+
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=#rag_project  # Change this for security
+
+  qdrant:
+    image: qdrant/qdrant:v1.4.0
+    container_name: qdrant
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+
+
+volumes:
+  mongodb_data:
+  qdrant_data:
+  clearml_data:
