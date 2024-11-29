@@ -5,6 +5,7 @@ from typing_extensions import Annotated
 from tqdm import tqdm
 from dataExtraction.crawlers import CrawlerDispatcher
 from urllib.parse import urlparse
+from typing import Union
 def openFile():
     file = open("urls.txt", "r")
     urls = file.readlines()
@@ -24,7 +25,7 @@ def openFile():
 #         else:
 #             print("Already visited")
 #     return crawled_urls
-def split_user_full_name(user: str | None) -> tuple[str, str]:
+def split_user_full_name(user: Union[str, None]) -> tuple[str, str]:
     if user is None:
         raise Exception("User name is empty")
 

@@ -4,10 +4,11 @@ import asyncio
 from pymongo import MongoClient
 from pymongo.errors import DuplicateKeyError,ConnectionFailure
 from loguru import logger
+from typing import Optional
 
 
 class MongoDBConnector:
-    _instance: MongoClient | None = None
+    _instance: Optional[MongoClient] = None
     def __new__(cls):
         if cls._instance is None:
             try:

@@ -6,7 +6,7 @@ from loguru import logger
 from pydantic import UUID4, BaseModel, Field
 from pymongo import errors
 from db.mongClient import connection
-
+from typing import Optional
 _databaseConnection = connection.get_database("rag")
 T = TypeVar("T", bound="BaseDataModel")
 class BaseDataModel(BaseModel, ABC, Generic[T]):
@@ -54,7 +54,7 @@ class BaseDataModel(BaseModel, ABC, Generic[T]):
 
         return dict_
 
-    def save(self: T, **kwargs) -> T | None:
+    def save(self: T, **kwargs) -> Optional[T]:
         collection = _databaseConnection[self.get_collection_name()]
         try:
             collection.insert_one(self.to_mongo(**kwargs))
@@ -97,7 +97,7 @@ class BaseDataModel(BaseModel, ABC, Generic[T]):
             return False
 
     @classmethod
-    def find(cls: Type[T], **filter_options) -> T | None:
+    def find(cls: Type[T], **filter_options) -> Optional[T]:
         collection = _databaseConnection[cls.get_collection_name()]
         collectionList = _databaseConnection.list_collection_names()
         print("this is +",collectionList)
