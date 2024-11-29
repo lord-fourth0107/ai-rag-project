@@ -38,10 +38,15 @@ class CrawlerDispatcher:
         domain = parsed_domain.netloc
 
         self._crawlers[r"https://(www\.)?{}/*".format(re.escape(domain))] = crawler
+        print(self._crawlers)
 
     def get_crawler(self, url: str) -> BaseCrawler:
         for pattern, crawler in self._crawlers.items():
+            print("##########")
+            print(pattern)
+            print(url)
             if re.match(pattern, url):
+                print("MAtched")
                 return crawler()
         # else:
         #     logger.warning(f"No crawler found for {url}. Defaulting to CustomArticleCrawler.")

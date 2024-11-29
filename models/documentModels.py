@@ -23,7 +23,7 @@ class RepoDocument(Document,ABC):
     link: str
 
     class Settings:
-        name = DataCategory.REPOSITORIES
+        name = str(DataCategory.REPOSITORIES)
 
 
 # class PostDocument(ABC):

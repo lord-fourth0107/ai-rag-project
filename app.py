@@ -77,6 +77,7 @@ def _crawl_link(dispatcher: CrawlerDispatcher, link: str, user: UserDocument) ->
     crawler_domain = urlparse(link).netloc
 
     try:
+        print(link)
         print(crawler)
         crawler.extract(link=link, user=user)
 

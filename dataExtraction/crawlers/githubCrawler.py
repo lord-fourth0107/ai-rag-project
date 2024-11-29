@@ -18,13 +18,13 @@ class GitHubCrawler(BaseCrawler):
         super().__init__()
         self._ignore = ignore
     def extract(self, link: str, **kwargs) -> None:
-        old_model = self.dataModel.find(link=link)
+        old_model = self.dataModel.find(name= "",link=link)
         if old_model is not None:
             logger.info(f"Repository already exists in the database: {link}")
             return
 
         logger.info(f"Starting scrapping GitHub repository: {link}")
-
+        print("This extract is being called")
         repo_name = link.rstrip("/").split("/")[-1]
 
         local_temp = tempfile.mkdtemp()
@@ -47,7 +47,7 @@ class GitHubCrawler(BaseCrawler):
                     file_path = os.path.join(dir, file)  # noqa: PTH118
                     with open(os.path.join(root, file), "r", errors="ignore") as f:  # noqa: PTH123, PTH118
                         tree[file_path] = f.read().replace(" ", "")
-
+            print(repo_name)
             user = kwargs["user"]
             instance = self.dataModel(
                 content=tree,
