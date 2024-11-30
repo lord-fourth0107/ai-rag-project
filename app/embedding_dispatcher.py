@@ -57,23 +57,23 @@ port = "27017"
 db_driver = MongoDBDriver()
 db_driver.set_credentials(user_name,password,port)
 client = db_driver.client()
-db = client['admin']  # Replace 'myDatabase' with your database name
-collection = db['local']  # Replace 'myCollection' with your collection name
+db = client['rag']  # Replace 'myDatabase' with your database name
+collection = db['repositories']  # Replace 'myCollection' with your collection name
 
 # Read all documents from the collection
 documents = collection.find()
-print(documents)
+#print(documents)
 for document in documents:
     # Access the 'content' field in the document
     content = document.get('content', '')  # Default to an empty string if 'content' is missing
     if content:
-        sentences = content.split('\n')
+        sentences = list(content.values())
 embedding_driver = EmbeddingHandler()
 embeddings = embedding_driver.set_data(sentences)
 print(embeddings[0])
 print(len(embeddings))
 
 vector_db_object = QDrantDriver();
-vector_db_object.create_client('trial_etl_embeddings',300)
+vector_db_object.create_client('github_etl_embeddings',300)
 vector_db_object.insert_vector_db(embeddings=embeddings)
 
