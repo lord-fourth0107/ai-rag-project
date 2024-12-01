@@ -1,10 +1,11 @@
 from vectorDBdriver import vectorDBClient
-from typing import Any
+from typing import Any, Callable, Dict, Generic, Type, TypeVar
 from uuid import UUID
 import numpy as np 
 from qdrant_client.models import CollectionInfo, PointStruct, Record
-
-
+from types import DataCategory
+from exceptions import ImproperlyConfigured
+T = TypeVar("T", bound="BaseVectorDocument")
 class BaseVectorDocument:
     def _uuid_to_str(self, item: Any) -> Any:
         if isinstance(item, dict):
@@ -44,4 +45,13 @@ class BaseVectorDocument:
         for result in search_result:
             metadata.append(result.payload)
         return metadata
+    
         
+    def get_category(cls: Type[T]) -> DataCategory:
+        if not hasattr(cls, "Config") or not hasattr(cls.Config, "category"):
+            raise ImproperlyConfigured(
+                "The class should define a Config class with"
+                "the 'category' property that reflects the collection's data category."
+            )
+
+        return cls.Config.category
