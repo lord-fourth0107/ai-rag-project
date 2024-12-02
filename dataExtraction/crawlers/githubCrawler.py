@@ -3,13 +3,9 @@ import requests
 from loguru import logger
 import subprocess
 import tempfile
-from bs4 import BeautifulSoup
-import json
-import os
-import asyncio
-
 from .baseCrawler import BaseCrawler
 from models.documentModels import RepoDocument
+import os
 ## Open file and read urls
 
 class GitHubCrawler(BaseCrawler):
@@ -48,14 +44,12 @@ class GitHubCrawler(BaseCrawler):
                     with open(os.path.join(root, file), "r", errors="ignore") as f:  # noqa: PTH123, PTH118
                         tree[file_path] = f.read().replace(" ", "")
 
-            user = kwargs["user"]
+            #user = kwargs["user"]
             instance = self.dataModel(
                 content=tree,
                 name=repo_name,
                 link=link,
                 platform="github",
-                author_id=user.id,
-                author_full_name=user.full_name,
             )
             instance.save()
 
