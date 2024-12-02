@@ -51,7 +51,7 @@ def openFile():
 if __name__ == "__main__":
     githubCrawler = GitHubCrawler()
     #user = get_or_create_user("John Doe")
-    urls=["https://github.com/ros/ros.git","https://github.com/ros/ros.git"]
+    urls=["https://medium.com/schmiedeone/getting-started-with-ros2-part-1-d4c3b7335c71"]
     # for url in openFile():
     #    urls.append(url)
     crawl_links(urls)

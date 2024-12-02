@@ -40,7 +40,7 @@ class CrawlerDispatcher:
     def register(self, domain: str, crawler: type[BaseCrawler]) -> None:
         parsed_domain = urlparse(domain)
         domain = parsed_domain.netloc
-
+        print(domain)
         self._crawlers[r"https://(www\.)?{}/*".format(re.escape(domain))] = crawler
     
     

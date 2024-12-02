@@ -7,14 +7,14 @@ from typing_extensions import Annotated
 from tqdm import tqdm
 
 def crawl_links( links: list[str]) -> Annotated[list[str], "crawled_links"]:
-    dispatcher = CrawlerDispatcher.build().register_github()#.register_linkedin().register_medium()
+    dispatcher = CrawlerDispatcher.build().register_github().register_medium()#.register_linkedin()
 
     logger.info(f"Starting to crawl {len(links)} link(s).")
 
     metadata = {}
     successfull_crawls = 0
     for link in tqdm(links):
-        #print(user)
+        print(link)
         successfull_crawl, crawled_domain = _crawl_link(dispatcher, link)
         successfull_crawls += successfull_crawl
 

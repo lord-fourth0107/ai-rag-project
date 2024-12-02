@@ -40,11 +40,11 @@ def query_data_warehouse():
     # return documents
 
 
-def fetch_all_data() -> dict[str, list[BaseDataModel]]:
+def fetch_all_data() -> dict[list[BaseDataModel]]:
     #user_id = str(user.id)
     with ThreadPoolExecutor() as executor:
         future_to_query = {
-            # executor.submit(__fetch_articles): "articles",
+            executor.submit(__fetch_articles): "articles",
             # executor.submit(__fetch_posts): "posts",
             executor.submit(__fetch_repositories): "repositories",
         }
@@ -61,8 +61,8 @@ def fetch_all_data() -> dict[str, list[BaseDataModel]]:
     return results[query_name]
 
 
-# def __fetch_articles() -> list[BaseDataModel]:
-#     return ArticleDocument.bulk_find()
+def __fetch_articles() -> list[BaseDataModel]:
+    return ArticleDocument.bulk_find()
 
 
 # def __fetch_posts() -> list[BaseDataModel]:

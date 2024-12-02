@@ -27,7 +27,7 @@ class RepoDocument(Document,ABC):
         name = DataCategory.REPOSITORIES
 
 
-class PostDocument(Document):
+class PostDocument(Document,ABC):
     image: Optional[str] = None
     link: str | None = None
 
@@ -35,12 +35,11 @@ class PostDocument(Document):
         name = DataCategory.POSTS
 
 
-class ArticleDocument(Document):
+class ArticleDocument(Document,ABC):
     link: str
-
     class Settings:
         name = DataCategory.ARTICLES
-class VideoSubtitleDocument(ABC):
+class VideoSubtitleDocument(Document,ABC):
     link: str
     class Settings:
         name = DataCategory.YOUTUBE_TRANSCRIPTIONS

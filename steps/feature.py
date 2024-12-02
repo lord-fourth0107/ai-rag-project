@@ -1,6 +1,6 @@
 from typing_extensions import Annotated
 from feature_engineering.preprocessing.dispatcher import CleaningDispatcher, ChunkingDispatcher
-from models.documentModels import Document, RepoDocument
+from models.documentModels import Document, RepoDocument, PostDocument
 from embedding.embeddings_dispatcher import EmbeddingDispatcher
 from utils import misc
 def clean_documents(
@@ -8,8 +8,9 @@ def clean_documents(
 ) -> Annotated[list, "cleaned_documents"]:
     cleaned_documents = []
     for document_str in documents:
-        document = RepoDocument(content=document_str.content, platform=document_str.platform, name=document_str.name, link=document_str.link)
-        cleaned_document = CleaningDispatcher.dispatch(document)
+        
+        #document = PostDocument(content=document_str.content, platform=document_str.platform, name=document_str.name, link=document_str.link)
+        cleaned_document = CleaningDispatcher.dispatch(document_str)
         cleaned_documents.append(cleaned_document)
 
     # step_context = get_step_context()
