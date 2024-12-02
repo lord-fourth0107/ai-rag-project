@@ -1,7 +1,8 @@
-from . import baseModel, dataCategory,documentModels
+from . import dataCategory,documentModels, mongoBaseModel, vectorBaseModel
 
 __all__ = [
-    "baseModel",
+    "mongoBaseModel",
     "dataCategory",
     "documentModels",
+    "vectorBaseModel"
 ]
