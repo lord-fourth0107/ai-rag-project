@@ -11,7 +11,7 @@ class QueryExpansion(RAGStep):
     @opik.track(name="QueryExpansion.generate")
     def generate(self, query: Query, expand_to_n: int,*args, **kwargs) -> list[Query]:
         assert expand_to_n > 0, "expand_to_n must be greater than 0"
-        if self.mock:
+        if self._mock:
             return [query for _ in range(expand_to_n)]
         query_expansion_template = QueryExpansionTemplate()
         prompt = query_expansion_template.create_template(expand_to_n-1)

@@ -5,19 +5,24 @@ from models.rag_base import Query
 from .base import RAGStep
 from .prompt_template import SelfQueryTemplate
 import openai
+from transformers import AutoTokenizer, AutoModelForCausalLM
 
+# model_name = "meta-llama/LLaMA-2-7b"
+# tokenizer = AutoTokenizer.from_pretrained(model_name)
+# model = AutoModelForCausalLM.from_pretrained(model_name)
 class SelfQuery(RAGStep):
     @opik.track(name="SelfQuery.generate")
     def generate(self, query: Query ) -> Query:
         if self._mock:
             return query
         prompt = SelfQueryTemplate().create_template()
-       
-        model = ChatOpenAI(
-            model="gpt-3.5-turbo",
-            api_key="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",
-            temperature=0
-        )
+        # input_text = "What is the LLaMA model?"
+        # inputs = tokenizer(input_text, return_tensors="pt")
+
+        # # Generate the output using the model
+        # outputs = model.generate(inputs['input_ids'], max_length=50, num_return_sequences=1)
+        # output_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
+
         chain = prompt | model
         response = chain.invoke({"question": query})
         return query ## should return response or query check again

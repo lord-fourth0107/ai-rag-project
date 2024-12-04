@@ -8,9 +8,9 @@ class Reranker(RAGStep):
         super().__init__(mock=mock)
         self.model = CrossEncoderModelSingleton()
 
-    @opik.track(name="Reranker.generate")
+    #@opik.track(name="Reranker.generate")
     def generate(self, query: Query, chunks: list[EmbeddedChunk], keep_top_k : int) -> list[EmbeddedChunk]:
-        if self.mock:
+        if self._mock:
             return chunks
 
         query_doc_tuple=[(query.content,chunk.content) for chunk in chunks]
