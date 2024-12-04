@@ -41,5 +41,6 @@ class ArticleDocument(Document,ABC):
         name = DataCategory.ARTICLES
 class VideoSubtitleDocument(Document,ABC):
     link: str
+    name: str
     class Settings:
         name = DataCategory.YOUTUBE_TRANSCRIPTIONS

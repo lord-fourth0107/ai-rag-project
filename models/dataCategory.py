@@ -2,7 +2,7 @@ from enum import StrEnum
 
 
 class DataCategory(StrEnum):
-    PROMPT = "prompt"
+    PROMPTS = "prompt"
     QUERIES = "queries"
 
     INSTRUCT_DATASET_SAMPLES = "instruct_dataset_samples"
@@ -13,4 +13,4 @@ class DataCategory(StrEnum):
     POSTS = "posts"
     ARTICLES = "articles"
     REPOSITORIES = "repositories"
-    YOUTUBE_TRANSCRIPTIONS = "youtube_transcriptions"
+    YOUTUBE_TRANSCRIPTIONS = "youtube"

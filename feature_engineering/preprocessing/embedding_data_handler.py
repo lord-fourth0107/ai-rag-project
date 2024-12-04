@@ -9,7 +9,7 @@ from feature_engineering.models.embedded_chunks import (
     EmbeddedPostChunk,
     EmbeddedRepositoryChunk,
 )
-# from llm_engineering.domain.queries import EmbeddedQuery, Query
+from models.rag_base import EmbeddedQuery, Query
 
 ChunkT = TypeVar("ChunkT", bound=Chunk)
 EmbeddedChunkT = TypeVar("EmbeddedChunkT", bound=EmbeddedChunk)
@@ -42,20 +42,20 @@ class EmbeddingDataHandler(ABC, Generic[ChunkT, EmbeddedChunkT]):
         pass
 
 
-# class QueryEmbeddingHandler(EmbeddingDataHandler):
-#     def map_model(self, data_model: Query, embedding: list[float]) -> EmbeddedQuery:
-#         return EmbeddedQuery(
-#             id=data_model.id,
-#             # author_id=data_model.author_id,
-#             # author_full_name=data_model.author_full_name,
-#             content=data_model.content,
-#             embedding=embedding,
-#             metadata={
-#                 "embedding_model_id": embedding_model.model_id,
-#                 "embedding_size": embedding_model.embedding_size,
-#                 "max_input_length": embedding_model.max_input_length,
-#             },
-#         )
+class QueryEmbeddingHandler(EmbeddingDataHandler):
+    def map_model(self, data_model: Query, embedding: list[float]) -> EmbeddedQuery:
+        return EmbeddedQuery(
+            id=data_model.id,
+            # author_id=data_model.author_id,
+            # author_full_name=data_model.author_full_name,
+            content=data_model.content,
+            embedding=embedding,
+            metadata={
+                "embedding_model_id": embedding_model.model_id,
+                "embedding_size": embedding_model.embedding_size,
+                "max_input_length": embedding_model.max_input_length,
+            },
+        )
 
 
 class PostEmbeddingHandler(EmbeddingDataHandler):

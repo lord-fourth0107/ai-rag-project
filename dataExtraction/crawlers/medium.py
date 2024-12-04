@@ -35,8 +35,8 @@ class MediumCrawler(BaseSeleniumCrawler):
         }
 
         self.driver.close()
-
-        #user = kwargs["user"]
+        #print("content",data)
+        print("content Type",type(data))        #user = kwargs["user"]
         instance = self.model(
             platform="medium",
             content=data,

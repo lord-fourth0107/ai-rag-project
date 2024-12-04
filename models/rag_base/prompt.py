@@ -1,9 +1,9 @@
-from models.VectorBaseDocument import VectorBaseDocument
+from models.vectorBaseModel import BaseVectorDocument
 from models.dataCategory import DataCategory
 from feature_engineering.models.cleaned_documents import CleanedDocument
 from pydantic import UUID4, Field
 
-class Prompt(VectorBaseDocument):
+class Prompt(BaseVectorDocument):
     template: str
     input_variables: dict
     content: str
