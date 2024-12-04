@@ -1,6 +1,7 @@
 import time 
 from abc import ABC, abstractmethod
 import chromedriver_autoinstaller
+from tempfile import mkdtemp
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 class BaseCrawler:
