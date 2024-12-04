@@ -6,6 +6,7 @@ from feature_engineering.preprocessing.embedding_data_handler import (
     PostEmbeddingHandler,
     QueryEmbeddingHandler,
     RepositoryEmbeddingHandler,
+    YoutubeEmbeddingHandler,
 )
 from models.dataCategory import DataCategory
 from models.vectorBaseModel import BaseVectorDocument
@@ -21,6 +22,8 @@ class EmbeddingHandlerFactory:
             return ArticleEmbeddingHandler()
         elif data_category == DataCategory.REPOSITORIES:
             return RepositoryEmbeddingHandler()
+        elif data_category == DataCategory.YOUTUBE:
+            return YoutubeEmbeddingHandler()
         else:
             raise ValueError("Unsupported data type")
         

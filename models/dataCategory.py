@@ -13,4 +13,4 @@ class DataCategory(StrEnum):
     POSTS = "posts"
     ARTICLES = "articles"
     REPOSITORIES = "repositories"
-    YOUTUBE_TRANSCRIPTIONS = "youtube"
+    YOUTUBE = "youtube"

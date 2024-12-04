@@ -9,12 +9,14 @@ from .chunking_data_handler import (
     ChunkingDataHandler,
     PostChunkingHandler,
     RepositoryChunkingHandler,
+    YoutubeChunkingHandler
 )
 from .cleaning_data_handler import (
     ArticleCleaningHandler,
     CleaningDataHandler,
     PostCleaningHandler,
     RepositoryCleaningHandler,
+    YoutubeCleaningHandler
 )
 from .embedding_data_handler import (
     ArticleEmbeddingHandler,
@@ -22,6 +24,7 @@ from .embedding_data_handler import (
     PostEmbeddingHandler,
     QueryEmbeddingHandler,
     RepositoryEmbeddingHandler,
+    YoutubeEmbeddingHandler
 )
 
 
@@ -34,6 +37,8 @@ class CleaningHandlerFactory:
             return ArticleCleaningHandler()
         elif data_category == DataCategory.REPOSITORIES:
             return RepositoryCleaningHandler()
+        elif data_category == DataCategory.YOUTUBE:
+            return YoutubeCleaningHandler()
         else:
             raise ValueError("Unsupported data type")
 
@@ -65,6 +70,8 @@ class ChunkingHandlerFactory:
             return ArticleChunkingHandler()
         elif data_category == DataCategory.REPOSITORIES:
             return RepositoryChunkingHandler()
+        elif data_category == DataCategory.YOUTUBE:
+            return YoutubeChunkingHandler()
         else:
             raise ValueError("Unsupported data type")
 
@@ -98,7 +105,10 @@ class EmbeddingHandlerFactory:
             return ArticleEmbeddingHandler()
         elif data_category == DataCategory.REPOSITORIES:
             return RepositoryEmbeddingHandler()
+        elif data_category == DataCategory.YOUTUBE:
+            return YoutubeEmbeddingHandler()
         else:
+            
             raise ValueError("Unsupported data type")
 
 
@@ -115,8 +125,9 @@ class EmbeddingDispatcher:
 
         if len(data_model) == 0:
             return []
-
+        print(data_model)
         data_category = data_model[0].get_category()
+
         assert all(
             data_model.get_category() == data_category for data_model in data_model
         ), "Data models must be of the same category."

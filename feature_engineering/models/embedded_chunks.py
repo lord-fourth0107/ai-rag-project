@@ -55,3 +55,10 @@ class EmbeddedRepositoryChunk(EmbeddedChunk):
         name = "embedded_repositories"
         category = DataCategory.REPOSITORIES
         use_vector_index = True
+class EmbeddedYoutubeChunk(EmbeddedChunk):
+    link: str
+
+    class Config:
+        name = "embedded_youtube"
+        category = DataCategory.YOUTUBE
+        use_vector_index = True

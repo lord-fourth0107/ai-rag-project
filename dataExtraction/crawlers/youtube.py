@@ -1,13 +1,18 @@
 from .baseCrawler import BaseCrawler
 from youtube_transcript_api import YouTubeTranscriptApi
-from models.documentModels import VideoSubtitleDocument
+from models.documentModels import YoutubeDocument
 from loguru import logger
-from pytube import YouTube
+import yt_dlp
+import requests
 from urllib.parse import urlparse, parse_qs
 class YouTubeCrawler(BaseCrawler):
-    model = VideoSubtitleDocument
-    def __init__(self)->None:
-        super().__init__()
+    model = YoutubeDocument
+    def get_title(link):
+        ydl_opts = {}
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(link, download=False)
+            return info.get('title', 'Title not found')
+
     def get_data(self, link: str, **kwargs):
         try:
             parsed_url = urlparse(url=link)
@@ -38,28 +43,19 @@ class YouTubeCrawler(BaseCrawler):
             return
         try:
             logger.info(f"Starting scrapping YouTube video: {link}")
-            # video_transcript = YouTubeTranscriptApi.get_transcript(video_id)
+            video_transcript = YouTubeTranscriptApi.get_transcript(video_id)
             # logger.debug(f"Video transcript extracted: {video_transcript}")
-            # #continuous_string = " ".join(item['text'] for item in video_transcript)
-            # logger.info(f"Video transcript extracted: {continuous_string}")
-            logger.info(f"Video added to the database: {video_id}")
-            #     "Title": YouTube(link).title,
-            #     "Content": continuous_string    
-            # }
-            #print("data",data["Title"])
-            #print(data)
+            continuous_string = " ".join(item['text'] for item in video_transcript)
             data = {
                 "Title": "U",
-                "Content": "U"
+                "Content": continuous_string
             }
-            instance = self.model(
-            )
             instance = self.model(
                 platform="youtube",
                 content=data,
                 link=link,  
+                # name="U"
             )
-            print(link)
             instance.save()
             logger.info(f"Video added to the database: {video_id}")
         except Exception as e:
