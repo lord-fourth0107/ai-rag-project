@@ -4,13 +4,13 @@ import requests
 # Function to process the user's input
 def process_question(selected_question):
     url = "https://example.com/api/answer"
-    response = requests.post(url, json={"question": question})
+    response = requests.post(url, json={"question": selected_question})
     return response.json().get("answer", "Error: No response from backend")
 # List of pre-populated questions
 questions = [
-    "What is AI?",
-    "How does Python work?",
-    "What is Gradio?"
+    "What is ROS?",
+    "How does ROS work?",
+    "What is ROS2?"
 ]
 
 # Gradio interface

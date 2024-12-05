@@ -3,6 +3,14 @@ from steps.crawl import crawl_links
 from feature_engineering.query_datawarehouse import query_data_warehouse
 from feature_engineering.load_to_vector_db import load_to_vector_db
 from steps.feature import clean_documents, chunk_and_embed
+from transformers import AutoTokenizer, AutoModelForCausalLM
+from ollama import Client
+import requests
+import ollama
+from feature_engineering.models.embedded_chunks import EmbeddedChunk
+# model_name = "meta-llama/Llama-2-7b"
+# tokenizer = AutoTokenizer.from_pretrained(model_name)
+# model = AutoModelForCausalLM.from_pretrained(model_name)
 from rag.retriver import ContextRetriever
 def openFile():
     file = open("urls.txt", "r")
@@ -63,9 +71,31 @@ if __name__ == "__main__":
     # chunked_documents = chunk_and_embed(cleanded_documents)
     # load_to_vector_db(chunked_documents)
     contextRetriver = ContextRetriever(mock=True)
-    contextRetriver.search("what is ros2")
-
-    #print(cleanded_documents)
+    docs = contextRetriver.search("what is ros2")
+    context = EmbeddedChunk.to_context(docs)
+    
+    client = Client(
+    host='http://localhost:11434',
+    )
+    #print("Models are :",client.list())
+    response = client.chat(model='llama3:latest', messages=[
+  {
+    'role': 'user',
+    'content': 'Steps to install  ros2',
+    # 'context': context
+  },
+])
+    print(response)
+# Send request to Ollama
+    # try:
+        
+    #     response = requests.post('http://localhost:11434', json=payload)
+    #     if response.status_code == 200:
+    #         print("Request successful!")
+    #         print("Response:", response.json()["content"])
+    # except Exception as e:
+    #     print("Error:", e)
+    # #print(cleanded_documents)
 
 
 
