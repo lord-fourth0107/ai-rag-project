@@ -1,34 +1,40 @@
 import gradio as gr
 import requests
 
-# Function to process the user's input
-def process_question(selected_question):
-    url = "https://example.com/api/answer"
-    response = requests.post(url, json={"question": selected_question})
-    return response.json().get("answer", "Error: No response from backend")
-# List of pre-populated questions
-questions = [
+# Define the backend URL
+BACKEND_URL = "http://127.0.0.1:5000/getAnswer"  
+
+# Prepopulated questions
+QUESTIONS = [
     "What is ROS?",
-    "How does ROS work?",
-    "What is ROS2?"
+    "Steps to install ROS?",
+    "What is the latest version of ROS?",
+    "Tell me how can I navigate to a specific pose - include replanning aspects in your answer.",
+    "What are the benefits of cloud computing?"
 ]
 
-# Gradio interface
+# Function to send a request to the backend
+def fetch_answer(question):
+    try:
+        # Make a POST request to the backend
+        response = requests.post(BACKEND_URL, json={"query": question})
+        response.raise_for_status()
+        return response.json().get("response", "No answer provided by the backend.")
+    except requests.exceptions.RequestException as e:
+        return f"Error fetching the response: {e}"
+
+# Build the Gradio interface
 with gr.Blocks() as app:
-    gr.Markdown("# Pre-Populated Questions App")
-    gr.Markdown("### Select a question from the dropdown below to get an answer.")
-    
-    # Dropdown for questions
-    question_input = gr.Dropdown(choices=questions, label="Select a Question", value=questions[0])
-    
-    # Output display
-    output = gr.Textbox(label="Answer", interactive=False)
-    
-    # Submit button
-    submit_btn = gr.Button("Get Answer")
-    
-    # Event binding
-    submit_btn.click(fn=process_question, inputs=question_input, outputs=output)
+    gr.Markdown("# Question Answering App")
+    gr.Markdown("Select a question from the dropdown below and get an answer from the backend.")
+
+    with gr.Row():
+        question_dropdown = gr.Dropdown(QUESTIONS, label="Select a Question")
+        submit_button = gr.Button("Get Answer")
+
+    output_text = gr.Textbox(label="Response", lines=5, interactive=False)
+
+    submit_button.click(fetch_answer, inputs=question_dropdown, outputs=output_text)
 
 # Launch the app
 app.launch()
