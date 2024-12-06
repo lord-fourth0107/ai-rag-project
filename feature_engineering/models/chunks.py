@@ -36,3 +36,8 @@ class RepositoryChunk(Chunk):
 
     class Config:
         category = DataCategory.REPOSITORIES
+class YoutubeChunk(Chunk):
+    link: str
+
+    class Config:
+        category = DataCategory.YOUTUBE

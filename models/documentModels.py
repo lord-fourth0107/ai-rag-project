@@ -39,7 +39,7 @@ class ArticleDocument(Document,ABC):
     link: str
     class Settings:
         name = DataCategory.ARTICLES
-class VideoSubtitleDocument(Document,ABC):
+class YoutubeDocument(Document,ABC):
     link: str
     class Settings:
-        name = DataCategory.YOUTUBE_TRANSCRIPTIONS
+        name = DataCategory.YOUTUBE

@@ -55,6 +55,7 @@ class BaseDataModel(BaseModel, ABC, Generic[T]):
         return dict_
 
     def save(self: T, **kwargs) -> T | None:
+        print("mamama")
         collection = _databaseConnection[self.get_collection_name()]
         try:
             collection.insert_one(self.to_mongo(**kwargs))
@@ -68,8 +69,7 @@ class BaseDataModel(BaseModel, ABC, Generic[T]):
     @classmethod
     def get_or_create(cls: Type[T], **filter_options) -> T:
         collection = _databaseConnection[cls.get_collection_name()]
-        print(collection)
-        print(filter_options)
+        logger.info(collection)
         try:
             instance = collection.find_one(filter_options)
             if instance:
@@ -103,13 +103,12 @@ class BaseDataModel(BaseModel, ABC, Generic[T]):
         print("this is +",collectionList)
         try:
             instance = collection.find_one(filter_options)
+            #print(instance)
             if instance:
                 return cls.from_mongo(instance)
-
             return None
         except errors.OperationFailure:
             logger.error("Failed to retrieve document")
-
             return None
 
     @classmethod
@@ -129,6 +128,6 @@ class BaseDataModel(BaseModel, ABC, Generic[T]):
             raise Exception(
                 "Document should define an Settings configuration class with the name of the collection."
             )
-
+        logger.info(cls.Settings.name)
         return cls.Settings.name
 

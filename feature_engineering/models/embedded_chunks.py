@@ -24,7 +24,6 @@ class EmbeddedChunk(BaseVectorDocument, ABC):
             Chunk {i + 1}:
             Type: {chunk.__class__.__name__}
             Platform: {chunk.platform}
-            # Author: {chunk.author_full_name}
             Content: {chunk.content}\n
             """
 
@@ -54,4 +53,11 @@ class EmbeddedRepositoryChunk(EmbeddedChunk):
     class Config:
         name = "embedded_repositories"
         category = DataCategory.REPOSITORIES
+        use_vector_index = True
+class EmbeddedYoutubeChunk(EmbeddedChunk):
+    link: str
+
+    class Config:
+        name = "embedded_youtube"
+        category = DataCategory.YOUTUBE
         use_vector_index = True

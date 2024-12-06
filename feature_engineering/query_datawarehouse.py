@@ -6,7 +6,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # from llm_engineering.application import utils
 from models.mongoBaseModel import BaseDataModel
-from models.documentModels import ArticleDocument, Document, PostDocument, RepoDocument
+from models.documentModels import ArticleDocument, Document, PostDocument, RepoDocument, YoutubeDocument
 
 
 # @step
@@ -47,6 +47,8 @@ def fetch_all_data() -> dict[list[BaseDataModel]]:
             executor.submit(__fetch_articles): "articles",
             # executor.submit(__fetch_posts): "posts",
             executor.submit(__fetch_repositories): "repositories",
+            executor.submit(__fetch_youtube): "youtube",
+
         }
 
         results = {}
@@ -71,6 +73,8 @@ def __fetch_articles() -> list[BaseDataModel]:
 
 def __fetch_repositories() -> list[BaseDataModel]:
     return RepoDocument.bulk_find()
+def __fetch_youtube() -> list[BaseDataModel]:
+    return YoutubeDocument.bulk_find()
 
 
 def _get_metadata(documents: list[Document]) -> dict:

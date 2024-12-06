@@ -40,3 +40,10 @@ class CleanedRepositoryDocument(CleanedDocument):
         name = "cleaned_repositories"
         category = DataCategory.REPOSITORIES
         use_vector_index = False
+class CleanedYoutubeDocument(CleanedDocument):
+    link: str
+
+    class Config:
+        name = "cleaned_youtube"
+        category = DataCategory.YOUTUBE
+        use_vector_index = False
