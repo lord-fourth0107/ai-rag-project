@@ -71,7 +71,6 @@ class ContextRetriever:
             query = Query.from_str(query)
 
         reranked_documents = self._reranker.generate(query=query, chunks=chunks, keep_top_k=keep_top_k)
-
         logger.info(f"{len(reranked_documents)} documents reranked successfully.")
 
         return reranked_documents

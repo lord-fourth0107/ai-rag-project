@@ -36,8 +36,6 @@ def index():
             'context': context
         },
         ])
-    print(response['message']['content'])
-    #print(response.to_dict())
     return jsonify({"response":response['message']['content']}) 
 
 

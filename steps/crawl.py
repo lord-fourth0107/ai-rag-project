@@ -5,6 +5,12 @@ from clearml import Task
 #from models.documentModels import UserDocument
 from typing_extensions import Annotated
 from tqdm import tqdm
+# task = Task.init(
+#     project_name="My Project",
+#     task_name="Data Collection",
+#     task_type=Task.TaskTypes.data_processing
+# )
+
 
 def crawl_links( links: list[str]) -> Annotated[list[str], "crawled_links"]:
     dispatcher = CrawlerDispatcher.build().register_github().register_medium().register_youtube()#.register_linkedin()

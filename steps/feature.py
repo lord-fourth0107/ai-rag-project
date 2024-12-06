@@ -3,6 +3,13 @@ from feature_engineering.preprocessing.dispatcher import CleaningDispatcher, Chu
 from models.documentModels import Document, RepoDocument, PostDocument
 from embedding.embeddings_dispatcher import EmbeddingDispatcher
 from utils import misc
+# from clearml import Task
+# task = Task.init(
+#     project_name="RAG-App",
+#     task_name="Feature-Extraction",
+#     task_type=Task.TaskTypes.data_processing
+# )
+
 def clean_documents(
     documents: Annotated[list, "raw_documents"],
 ) -> Annotated[list, "cleaned_documents"]:
