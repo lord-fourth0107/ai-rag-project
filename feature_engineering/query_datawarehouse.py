@@ -12,6 +12,8 @@ from models.documentModels import ArticleDocument, Document, PostDocument, RepoD
 # @step
 def query_data_warehouse():
     results = fetch_all_data()
+    print(len(results))
+    print(results[0])
 
     # step_context = get_step_context()
     # step_context.add_output_metadata(output_name="raw_documents", metadata=_get_metadata(results))
@@ -41,7 +43,8 @@ def query_data_warehouse():
 
 
 def fetch_all_data() -> dict[list[BaseDataModel]]:
-    #user_id = str(user.id)
+    #user_id = str(user.id
+    docs = []
     with ThreadPoolExecutor() as executor:
         future_to_query = {
             executor.submit(__fetch_articles): "articles",
@@ -51,16 +54,21 @@ def fetch_all_data() -> dict[list[BaseDataModel]]:
 
         }
 
+        # In the code snippet provided, `results = {}` is initializing an empty dictionary named
+        # `results`. This dictionary will be used to store the results of different queries that are
+        # being executed concurrently using a `ThreadPoolExecutor`. Each query result will be stored
+        # in this dictionary with a specific key associated with the type of query being executed.
         results = {}
         for future in as_completed(future_to_query):
             query_name = future_to_query[future]
             try:
                 results[query_name] = future.result()
+                docs.append(results[query_name])
             except Exception:
                 #logger.exception(f"'{query_name}' request failed.")
 
                 results[query_name] = []
-    return results[query_name]
+    return docs
 
 
 def __fetch_articles() -> list[BaseDataModel]:
