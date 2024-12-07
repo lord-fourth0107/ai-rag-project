@@ -10,6 +10,8 @@ import requests
 import ollama
 from feature_engineering.models.embedded_chunks import EmbeddedChunk
 from settings import URL_FILE_PATH
+# from clearmlSetup.clearmlPipeline import pipeline
+# from clearmlSetup import PipelineController
 # from clearml import Task
 # task = Task.init(project_name="ROS-RAG", task_name="RAG-App")
 # model_name = "meta-llama/Llama-2-7b"
@@ -43,27 +45,28 @@ def index():
 if __name__ == "__main__":
     # githubCrawler = GitHubCrawler()
     # #user = get_or_create_user("John Doe")
-    # urls=["","https://medium.com/@Gabriel_Chollet/what-is-ros-c38493fe3eca","https://youtu.be/Gg25GfA456o?si=KEeyvdEIEC3tdYF5"]
-    # #urls=["https://youtu.be/Gg25GfA456o?si=KEeyvdEIEC3tdYF5"]
+    #urls=["https://github.com/ros2/ros2_documentation","https://medium.com/@Gabriel_Chollet/what-is-ros-c38493fe3eca","https://youtu.be/Gg25GfA456o?si=KEeyvdEIEC3tdYF5"]
+    urls=["https://medium.com/@Gabriel_Chollet/what-is-ros-c38493fe3eca"]
     # # for url in openFile():
     # #    urls.append(url)
-    # crawl_links(urls)
-    # results = query_data_warehouse()
-    # #print(results)
-    # cleanded_documents = clean_documents(results)
-    # chunked_documents = chunk_and_embed(cleanded_documents)
-    # load_to_vector_db(chunked_documents)
+    crawl_links(urls)
+    results = query_data_warehouse()
+    #print(results)
+    cleanded_documents = clean_documents(results)
+    chunked_documents = chunk_and_embed(cleanded_documents)
+    load_to_vector_db(chunked_documents)
     # contextRetriver = ContextRetriever(mock=True)
     # docs = contextRetriver.search("what is ros2")
     # context = EmbeddedChunk.to_context(docs)
-    urls = get_links(filePath=URL_FILE_PATH)
-    crawl_links(urls)
+
+    # urls = get_links(filePath=URL_FILE_PATH)
+    # crawl_links(urls)
     # for url in urls:
     #     crawl_links(url)
    
     # # print(response)
     # app.run(debug=True)
-
+    #pipeline.start()
 
 
 

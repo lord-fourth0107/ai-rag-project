@@ -1,24 +1,24 @@
 from dataExtraction.crawlers import CrawlerDispatcher
 from urllib.parse import urlparse
 from loguru import logger
-from clearml import Task
+# from clearmlSetup import Task
 #from models.documentModels import UserDocument
 from typing_extensions import Annotated
 from tqdm import tqdm
-from clearml import PipelineDecorator
+# from clearmlSetup import PipelineDecorator
 # task = Task.init(
 #     project_name="My Project",
 #     task_name="Data Collection",
 #     task_type=Task.TaskTypes.data_processing
 # )
-@PipelineDecorator.component(name="get_links",output_name="links")
+# @PipelineDecorator.component(name="get_links",output_name="links")
 def get_links(filePath:str) -> list[str]:
     links = []
     with open(filePath) as f:
         for line in f:
             links.append(line.strip())
     return links
-@PipelineDecorator.component(name="crawl_links",)
+# @PipelineDecorator.component(name="crawl_links",)
 def crawl_links( links: list[str]) -> Annotated[list[str], "crawled_links"]:
     dispatcher = CrawlerDispatcher.build().register_github().register_medium().register_youtube()#.register_linkedin()
 

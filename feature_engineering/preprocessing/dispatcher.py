@@ -125,7 +125,6 @@ class EmbeddingDispatcher:
 
         if len(data_model) == 0:
             return []
-        print(data_model)
         data_category = data_model[0].get_category()
 
         assert all(
