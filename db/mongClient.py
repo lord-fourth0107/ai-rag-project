@@ -24,7 +24,11 @@ class MongoDBConnector:
         """
         if cls._instance is None:
             try:
-                cls._instance = MongoClient("mongodb://localhost:27017/") # replace this with setting files when u have docker compose
+                user_name = "admin"
+                password = "#rag_project"
+                port = "27017"
+                uri = "mongodb://{}:{}@localhost:{}/?authSource=admin".format(user_name,password,port);
+                cls._instance = MongoClient(uri) # replace this with setting files when u have docker compose
             except ConnectionFailure as e:
                 logger.error(e)
             logger.info("Connected to MongoDB")

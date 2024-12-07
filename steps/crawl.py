@@ -38,7 +38,7 @@ def _crawl_link(dispatcher: CrawlerDispatcher, link: str) -> tuple[bool, str]:
     crawler_domain = urlparse(link).netloc
 
     try:
-        print(crawler)
+        print(link)
         crawler.extract(link=link)
         return (True, crawler_domain)
     except Exception as e:
