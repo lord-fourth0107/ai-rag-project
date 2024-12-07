@@ -58,7 +58,7 @@ class ArticleCleaningHandler(CleaningDataHandler):
             # author_id=data_model.author_id,
             # author_full_name=data_model.author_full_name,
         )
-        logger.debug(f"Cleaned article: {instance.__dict__}")
+        #logger.debug(f"Cleaned article: {instance.__dict__}")
         return instance
 
 
