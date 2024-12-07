@@ -1,5 +1,5 @@
 from dataExtraction.crawlers import GitHubCrawler
-from steps.crawl import crawl_links
+from steps.crawl import crawl_links, get_links
 from feature_engineering.query_datawarehouse import query_data_warehouse
 from feature_engineering.load_to_vector_db import load_to_vector_db
 from steps.feature import clean_documents, chunk_and_embed
@@ -9,6 +9,7 @@ from flask import Flask,jsonify,request
 import requests
 import ollama
 from feature_engineering.models.embedded_chunks import EmbeddedChunk
+from settings import URL_FILE_PATH
 # from clearml import Task
 # task = Task.init(project_name="ROS-RAG", task_name="RAG-App")
 # model_name = "meta-llama/Llama-2-7b"
@@ -42,7 +43,7 @@ def index():
 if __name__ == "__main__":
     # githubCrawler = GitHubCrawler()
     # #user = get_or_create_user("John Doe")
-    # urls=["https://github.com/ros2/ros2_documentation","https://medium.com/@Gabriel_Chollet/what-is-ros-c38493fe3eca","https://youtu.be/Gg25GfA456o?si=KEeyvdEIEC3tdYF5"]
+    # urls=["","https://medium.com/@Gabriel_Chollet/what-is-ros-c38493fe3eca","https://youtu.be/Gg25GfA456o?si=KEeyvdEIEC3tdYF5"]
     # #urls=["https://youtu.be/Gg25GfA456o?si=KEeyvdEIEC3tdYF5"]
     # # for url in openFile():
     # #    urls.append(url)
@@ -55,10 +56,13 @@ if __name__ == "__main__":
     # contextRetriver = ContextRetriever(mock=True)
     # docs = contextRetriver.search("what is ros2")
     # context = EmbeddedChunk.to_context(docs)
-    
-    
-    # print(response)
-    app.run(debug=True)
+    urls = get_links(filePath=URL_FILE_PATH)
+    crawl_links(urls)
+    # for url in urls:
+    #     crawl_links(url)
+   
+    # # print(response)
+    # app.run(debug=True)
 
 
 
