@@ -3,3 +3,4 @@ https://github.com/moveit/moveit2_tutorials.git
 https://github.com/ros-navigation/docs.nav2.org.git
 https://github.com/gazebosim/docs.git
 https://www.youtube.com/watch?v=GHb6Wr_exxI
+https://medium.com/schmiedeone/getting-started-with-ros2-part-1-d4c3b7335c71
