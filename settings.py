@@ -11,10 +11,10 @@ class Settings(BaseSettings):
 
     # OpenAI API
     OPENAI_MODEL_ID: str = "gpt-4o-mini"
-    OPENAI_API_KEY: str | None = None
+    OPENAI_API_KEY: str = "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"
 
     # Huggingface API
-    HUGGINGFACE_ACCESS_TOKEN: str | None = None
+    HUGGINGFACE_ACCESS_TOKEN: str = "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"
 
     # Comet ML (during training)
     COMET_API_KEY: str | None = None
@@ -122,4 +122,4 @@ class Settings(BaseSettings):
     #         )
 
 
-#settings = Settings.load_settings()
+settings = Settings()

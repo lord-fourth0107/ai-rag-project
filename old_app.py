@@ -53,8 +53,11 @@ if __name__ == "__main__":
     #user = get_or_create_user("John Doe")
     # urls=["https://medium.com/schmiedeone/getting-started-with-ros2-part-1-d4c3b7335c71"]
     urls = []
-    for url in openFile():
-       urls.append(url)
+    with open("urls.txt") as f:
+        for line in f:
+            urls.append(line.strip())
+       
+
     crawl_links(urls)
     results = query_data_warehouse()
     print(len(results))
