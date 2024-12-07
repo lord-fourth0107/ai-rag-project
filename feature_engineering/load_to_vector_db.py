@@ -17,7 +17,6 @@ def load_to_vector_db(
         logger.info(f"Loading documents into {document_class.get_collection_name()}")
         for documents_batch in misc.batch(documents, size=4):
             try:
-                print(documents_batch)
                 document_class.bulk_insert(documents_batch)
             except Exception as e:
                 logger.error(f"Failed to insert documents into {document_class.get_collection_name() }due to {e}")
