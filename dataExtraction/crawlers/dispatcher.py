@@ -8,7 +8,7 @@ from .baseCrawler import BaseCrawler
 from .githubCrawler import GitHubCrawler
 from .linkedin import LinkedInCrawler
 from .medium import MediumCrawler
-# from .youtube import YouTubeCrawler
+from .youtube import YouTubeCrawler
 
 class CrawlerDispatcher:
     def __init__(self) -> None:
@@ -33,9 +33,9 @@ class CrawlerDispatcher:
     def register_github(self) -> "CrawlerDispatcher":
         self.register("https://github.com", GitHubCrawler)
         return self
-    # def register_youtube(self,domain: str, crawler: type[BaseCrawler]) -> None:
-    #     self.register("https://www.youtube.com", YouTubeCrawler)
-    #     return self
+    def register_youtube(self) -> "CrawlerDispatcher":
+        self.register("https://youtu.be/", YouTubeCrawler)
+        return self
 
     def register(self, domain: str, crawler: type[BaseCrawler]) -> None:
         parsed_domain = urlparse(domain)

@@ -5,16 +5,21 @@ from clearml import Task
 #from models.documentModels import UserDocument
 from typing_extensions import Annotated
 from tqdm import tqdm
+# task = Task.init(
+#     project_name="My Project",
+#     task_name="Data Collection",
+#     task_type=Task.TaskTypes.data_processing
+# )
+
 
 def crawl_links( links: list[str]) -> Annotated[list[str], "crawled_links"]:
-    dispatcher = CrawlerDispatcher.build().register_github().register_medium()#.register_linkedin()
+    dispatcher = CrawlerDispatcher.build().register_github().register_medium().register_youtube()#.register_linkedin()
 
     logger.info(f"Starting to crawl {len(links)} link(s).")
 
     metadata = {}
     successfull_crawls = 0
     for link in tqdm(links):
-        print(link)
         successfull_crawl, crawled_domain = _crawl_link(dispatcher, link)
         successfull_crawls += successfull_crawl
 
@@ -23,7 +28,7 @@ def crawl_links( links: list[str]) -> Annotated[list[str], "crawled_links"]:
     # step_context = get_step_context()
     #step_context.add_output_metadata(output_name="crawled_links", metadata=metadata)
 
-    logger.info(f"Successfully crawled {successfull_crawls} / {len(links)} links.")
+    logger.info(f"Successfully crawled {successfull_crawls} / {len(links)} links.",link)
 
     return links
 
@@ -35,8 +40,7 @@ def _crawl_link(dispatcher: CrawlerDispatcher, link: str) -> tuple[bool, str]:
     try:
         print(crawler)
         crawler.extract(link=link)
-
         return (True, crawler_domain)
     except Exception as e:
-        logger.error(f"An error occurred while crowling: {e!s}")
+        logger.error(f"An error occurred while crawling: {str(e)}")
         return (False, crawler_domain)

@@ -15,8 +15,8 @@ class Query(BaseVectorDocument):
             return Query(
                 id=self.id,
                 content=new_content,
-                author_id=self.author_id,
-                author_full_name=self.author_full_name,
+                # author_id=self.author_id,
+                # author_full_name=self.author_full_name,
                 metadata=self.metadata,
             )
         

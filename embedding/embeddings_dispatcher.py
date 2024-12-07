@@ -4,8 +4,9 @@ from feature_engineering.preprocessing.embedding_data_handler import (
     ArticleEmbeddingHandler,
     EmbeddingDataHandler,
     PostEmbeddingHandler,
-    #QueryEmbeddingHandler,
+    QueryEmbeddingHandler,
     RepositoryEmbeddingHandler,
+    YoutubeEmbeddingHandler,
 )
 from models.dataCategory import DataCategory
 from models.vectorBaseModel import BaseVectorDocument
@@ -13,14 +14,16 @@ from models.vectorBaseModel import BaseVectorDocument
 class EmbeddingHandlerFactory:
     @staticmethod
     def create_handler(data_category: DataCategory) -> EmbeddingDataHandler:
-        # if data_category == DataCategory.QUERIES:
-        #     return QueryEmbeddingHandler()
+        if data_category == DataCategory.QUERIES:
+            return QueryEmbeddingHandler()
         if data_category == DataCategory.POSTS:
             return PostEmbeddingHandler()
         elif data_category == DataCategory.ARTICLES:
             return ArticleEmbeddingHandler()
         elif data_category == DataCategory.REPOSITORIES:
             return RepositoryEmbeddingHandler()
+        elif data_category == DataCategory.YOUTUBE:
+            return YoutubeEmbeddingHandler()
         else:
             raise ValueError("Unsupported data type")
         
