@@ -4,6 +4,7 @@ import asyncio
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 from loguru import logger
+from settings import MONGO_HOST_URL
 
 
 # The class `MongoDBConnector` is a singleton class that establishes a connection to a MongoDB
@@ -24,11 +25,7 @@ class MongoDBConnector:
         """
         if cls._instance is None:
             try:
-                user_name = "admin"
-                password = "#rag_project"
-                port = "27017"
-                uri = "mongodb://{}:{}@localhost:{}/?authSource=admin".format(user_name,password,port);
-                cls._instance = MongoClient(uri) # replace this with setting files when u have docker compose
+                cls._instance = MongoClient(MONGO_HOST_URL) # replace this with setting files when u have docker compose
             except ConnectionFailure as e:
                 logger.error(e)
             logger.info("Connected to MongoDB")
