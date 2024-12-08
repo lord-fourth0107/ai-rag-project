@@ -7,13 +7,18 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 # from llm_engineering.application import utils
 from models.mongoBaseModel import BaseDataModel
 from models.documentModels import ArticleDocument, Document, PostDocument, RepoDocument, YoutubeDocument
+from clearml import PipelineDecorator, Task
 
 
-# @step
+# task = Task.create(
+#     project_name="ROS-RAG",
+#     task_name="Query Data Warehouse",
+#     task_type=Task.TaskTypes.data_processing
+# )
+
+# @PipelineDecorator.component(name="queryDataWarehouse")
 def query_data_warehouse():
     results = fetch_all_data()
-    print(len(results))
-    print(results[0])
 
     # step_context = get_step_context()
     # step_context.add_output_metadata(output_name="raw_documents", metadata=_get_metadata(results))

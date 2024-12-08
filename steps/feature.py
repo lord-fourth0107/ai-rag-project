@@ -1,8 +1,11 @@
 from typing_extensions import Annotated
+from feature_engineering.query_datawarehouse import query_data_warehouse
+from feature_engineering.load_to_vector_db import load_to_vector_db
 from feature_engineering.preprocessing.dispatcher import CleaningDispatcher, ChunkingDispatcher
 from models.documentModels import Document, RepoDocument, PostDocument
 from embedding.embeddings_dispatcher import EmbeddingDispatcher
 from utils import misc
+from clearml.automation import PipelineDecorator
 # from clearml import Task
 # task = Task.init(
 #     project_name="RAG-App",
@@ -48,3 +51,11 @@ def chunk_and_embed(
     # step_context.add_output_metadata(output_name="embedded_documents", metadata=metadata)
 
     return embedded_chunks
+
+# @PipelineDecorator.component(name="embedAndLoad")
+def embed_and_load():
+    results = query_data_warehouse()
+    cleanded_documents = clean_documents(results)
+    chunked_documents = chunk_and_embed(cleanded_documents)
+    load_to_vector_db(chunked_documents)
+

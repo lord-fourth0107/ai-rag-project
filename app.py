@@ -1,72 +1,107 @@
-from dataExtraction.crawlers import GitHubCrawler
-from steps.crawl import crawl_links, get_links
-from feature_engineering.query_datawarehouse import query_data_warehouse
-from feature_engineering.load_to_vector_db import load_to_vector_db
-from steps.feature import clean_documents, chunk_and_embed
-from transformers import AutoTokenizer, AutoModelForCausalLM
-from ollama import Client
-from flask import Flask,jsonify,request
-import requests
-import ollama
-from feature_engineering.models.embedded_chunks import EmbeddedChunk
+from steps.crawl import ingest
+import importlib
+import threading
 from settings import URL_FILE_PATH
-# from clearmlSetup.clearmlPipeline import pipeline
-# from clearmlSetup import PipelineController
-# from clearml import Task
-# task = Task.init(project_name="ROS-RAG", task_name="RAG-App")
-# model_name = "meta-llama/Llama-2-7b"
-
-from rag.retriver import ContextRetriever
-app = Flask(__name__)
-def openFile():
-    file = open("urls.txt", "r")
-    urls = file.readlines()
-    file.close()    
-    return urls
-@app.route("/getAnswer", methods=['POST','PUT'])
-def index():
-    query = request.get_json().get('query')
-    retriever = ContextRetriever(query)
-    docs = retriever.search(query)
-    context = EmbeddedChunk.to_context(docs)
-    client = Client(
-    host='http://localhost:11434',
+from steps.feature import embed_and_load
+from gradio_applet.gradio_app import launch_gradio_app
+from flask_app.flaskApp import run_flask
+from clearml.automation.controller import PipelineDecorator
+from clearml import PipelineController
+from clearml import Task
+pipelinetask = Task.init(
+            project_name='ROS-RAG', 
+            task_name='RAG-Pipeline',
+        )
+# @PipelineDecorator.component( cache=True, task_type=TaskTypes.data_processing)
+def data_ingestion(filePath:str):
+    extraction_task = Task.create(
+            project_name='ROS-RAG',
+            task_name='Data Extraction',
+            # parent=pipelinetask,
     )
-    response = client.chat(model='llama3:latest', messages=[
-        {
-            'role': 'user',
-            'content': query,
-            'context': context
-        },
-        ])
-    return jsonify({"response":response['message']['content']}) 
+    ingest_module = importlib.import_module('steps.crawl')
+    ingest_module.ingest(filePath)
+# @PipelineDecorator.component(name="featureExtraction",cache=True, task_type=TaskTypes.custom)
+def feature_extraction():
+   feature_extraction_task = Task.create(
+            project_name='ROS-RAG',
+            task_name='Feature Extraction',
+            # parent=pipelinetask,        
+   )
+   feature_extraction_module = importlib.import_module('steps.feature')
+   feature_extraction_module.embed_and_load()
 
+# @PipelineDecorator.component(name="launch_flask_app",task_type=TaskTypes.custom)
+def launch_flask_app():
+    launch_flask_app_task = Task.create(
+            project_name='ROS-RAG',
+            task_name='Flask App',
+            # parent=pipelinetask,
+    )
+    launch_flask_app_module = importlib.import_module('flask_app')
+    launch_flask_app_module.run_flask()
 
+# @PipelineDecorator.component(name="launch_gradio_app_call",task_type=TaskTypes.custom)
+def launch_gradio_app_call():
+    launch_gradio_app_task = Task.create(
+            project_name='ROS-RAG',
+            task_name='Gradio App',
+            # parent=pipelinetask,    
+    )
+    launch_gradio_app_module = importlib.import_module('gradio_applet') 
+    launch_gradio_app_module.gradio_app()
+
+# app = Flask(__name__)
+
+flask_thread = threading.Thread(target=launch_flask_app)
+# @PipelineDecorator.pipeline(name="pipeline",project="ROS-RAG",version="1.0")
+def pipeline(filePath:str):
+    data_ingestion(filePath)
+    feature_extraction()
+    flask_thread.start()
+    launch_gradio_app()
 if __name__ == "__main__":
-    # githubCrawler = GitHubCrawler()
-    # #user = get_or_create_user("John Doe")
-    #urls=["https://github.com/ros2/ros2_documentation","https://medium.com/@Gabriel_Chollet/what-is-ros-c38493fe3eca","https://youtu.be/Gg25GfA456o?si=KEeyvdEIEC3tdYF5"]
-    urls=["https://medium.com/@Gabriel_Chollet/what-is-ros-c38493fe3eca"]
-    # # for url in openFile():
-    # #    urls.append(url)
-    crawl_links(urls)
-    results = query_data_warehouse()
-    #print(results)
-    cleanded_documents = clean_documents(results)
-    chunked_documents = chunk_and_embed(cleanded_documents)
-    load_to_vector_db(chunked_documents)
-    # contextRetriver = ContextRetriever(mock=True)
-    # docs = contextRetriver.search("what is ros2")
-    # context = EmbeddedChunk.to_context(docs)
+    PipelineDecorator.set_default_execution_queue("default")
+    PipelineDecorator.debug_pipeline()
+    pipeline(URL_FILE_PATH)
+    rag_pipeline = PipelineController(
+        project = "ROS-RAG",
+        name = "RAG-Pipeline",
+        version = "1.0",
+        add_pipeline_tags=False,
+    )
+    rag_pipeline.set_default_execution_queue("default")
+    rag_pipeline.add_parameter(
+        name="filePath",
+        default=URL_FILE_PATH,
+    )
+    rag_pipeline.add_function_step(
+        name="data_ingestion",
+        function=data_ingestion,
+        function_kwargs={
+            "filePath": "{{filePath}}"
+        }
 
-    # urls = get_links(filePath=URL_FILE_PATH)
-    # crawl_links(urls)
-    # for url in urls:
-    #     crawl_links(url)
-   
-    # # print(response)
-    # app.run(debug=True)
-    #pipeline.start()
+    )
+    rag_pipeline.add_function_step(
+        name="feature_extraction",
+        function=feature_extraction,
+        parents=["data_ingestion"],
+    )
+    rag_pipeline.add_function_step(
+        name="launch_flask_app",
+        function=launch_flask_app,
+        parents= ["feature_extraction"],
+    )
+    rag_pipeline.add_function_step(
+        name="launch_gradio_app_call",
+        function=launch_gradio_app_call,
+        parents=["feature_extraction"],
+    )
+    rag_pipeline.start_locally()
+    #pipeline(URL_FILE_PATH)
+    
+    
 
 
 
