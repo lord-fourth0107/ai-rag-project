@@ -1,22 +1,27 @@
 from qdrant_client import QdrantClient
+from settings import QDRANT_HOST_URL
 
 class QDrantDriver:
     _instance: QdrantClient | None = None
     def __new__(cls,*args, **kwargs):
+        """
+        The function is a custom implementation of the singleton design pattern in Python.
+        
+        :param cls: The `cls` parameter in the `__new__` method refers to the class itself. It is
+        automatically passed as the first argument to the method and represents the class that the
+        method is called on
+        :return: The `__new__` method is returning an instance of the `QdrantClient` class, which is
+        created with the `QDRANT_HOST_URL` as a parameter.
+        """
         if cls._instance is None:
-            # self.url = "http://localhost:6333" # Replace with your Qdrant server URL in docker file
-            # self.size = size
-            # self.name = vector_db_name
-            cls._instance = QdrantClient("http://localhost:6333")
-            # vectors_config = {
-            #     "size": size,  # Set the vector size to 128 (as per your feature vector)
-            #     "distance": "Cosine"  # Use cosine similarity for distance metric
-            # }
-            # self.client.recreate_collection(
-            #     collection_name=vector_db_name,
-            #     vectors_config=vectors_config
-            # )
+          
+            cls._instance = QdrantClient(QDRANT_HOST_URL)
         return cls._instance
 
+# `vectorDBClient = QDrantDriver()` is creating an instance of the `QDrantDriver` class using a custom
+# implementation of the singleton design pattern in Python. The `__new__` method of the `QDrantDriver`
+# class ensures that only one instance of the `QdrantClient` class is created and returned. This
+# instance is stored in the `vectorDBClient` variable, allowing access to the QdrantClient
+# functionality with the specified `QDRANT_HOST_URL`.
 
 vectorDBClient = QDrantDriver()

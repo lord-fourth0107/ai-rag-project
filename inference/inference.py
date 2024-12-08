@@ -8,7 +8,11 @@ app = Flask(__name__)
 
 
 @app.route("/")
+    
 def index():
+    """
+    The `index` function in a Python Flask app retrieves context based on a query parameter.
+    """
     query = requests.args.get('query')
     retriever = ContextRetriever(query) 
 if __name__ == "__main__":
