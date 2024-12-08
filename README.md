@@ -28,6 +28,10 @@ db.repositories.find()
 
 ## Step1:
 Follow the steps from 1 to 11 in the below link to create clearml related services (docker services such as clearml-fileserver, clearml-apiserver, clearml-webserver) this will result in a clearml specific docker compose file., which should be like clearml-compose.yml file in the final-instruct-db branch
+```
+https://clear.ml/docs/latest/docs/deploying_clearml/clearml_server_linux_mac/
+
+```
 
 ## Step2: 
 run the below command to launch all the required docker services and images, in the project directory:
