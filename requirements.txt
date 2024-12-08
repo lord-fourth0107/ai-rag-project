@@ -19,4 +19,4 @@ concurrent.futures
 threading
 typing_extensions
 tqdm
-beautifulsoup4
+bs4

@@ -2,7 +2,7 @@ from dataExtraction.crawlers import GitHubCrawler
 from steps.crawl import ingest
 from feature_engineering.query_datawarehouse import query_data_warehouse
 from feature_engineering.load_to_vector_db import load_to_vector_db
-from steps.feature import clean_documents, chunk_and_embed
+from steps.feature import embed_and_load
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from ollama import Client
 from flask import Flask,jsonify,request
@@ -44,6 +44,7 @@ def index():
 
 if __name__ == "__main__":
      ingest(URL_FILE_PATH)
+     embed_and_load()
     # githubCrawler = GitHubCrawler()
     # #user = get_or_create_user("John Doe")
     #urls=["https://github.com/ros2/ros2_documentation","https://medium.com/@Gabriel_Chollet/what-is-ros-c38493fe3eca","https://youtu.be/Gg25GfA456o?si=KEeyvdEIEC3tdYF5"]
