@@ -1,70 +1,74 @@
 # from clearml.automation import PipelineController
 # from steps.crawl import get_links, crawl_links
 # from steps.feature import clean_documents, chunk_and_embed
+# from feature_engineering.query_datawarehouse import fetch_all_data
 # from feature_engineering.load_to_vector_db import load_to_vector_db
-# from feature_engineering.query_datawarehouse import query_data_warehouse
-# from settings import URL_FILE_PATH
 
-# feature_pipeline = PipelineController(
-#     name="Feature Engineering",
+# # Define the pipeline
+# data_pipeline = PipelineController(
+#     name="Data Pipeline",
 #     project="ROS-RAG",
 #     version="1.0",
 #     add_pipeline_tags=["data_sourcing","raw_data_crawling_and_ingestion" ,"clean_chunk_and_embed","app_launch"]
 # )
 
-
-# feature_pipeline.add_function_step(
-#     name="getlinks",
+# # Add tasks to the pipeline
+# data_pipeline.add_function_step(
+#     name="get_links",
 #     function=get_links,
-#     function_return=['links'],
 #     function_kwargs={
-#         "filePath": URL_FILE_PATH
+#         "filePath": "urls.txt"
 #     }
-    
 # )
-# feature_pipeline.add_function_step(
+
+# data_pipeline.add_function_step(
 #     name="crawlAndIngest",
 #     function=crawl_links,
 #     function_kwargs={
-#         "links": '${getlinks.links}'
+#         "links": "{{get_links.output.links}}"
 #     }
-   
-# )
-# feature_pipeline.add_function_step(
-#     name="queryDataWarehouse",
-#     function=query_data_warehouse,
-#     parents=['crawlAndIngest'] ,
-#     function_return = ['raw_documents']
-# )
-# feature_pipeline.add_function_step(
-#     name="cleanDocuments",
-#     function=clean_documents,
-#     function_return=['cleaned_documents'],
-#     function_kwargs={
-#         "crawled_links": '${queryDataWarehouse.raw_documents}'
-#     }
-   
 # )
 
-# feature_pipeline.add_function_step(
-#     name="chunkAndEmbed",
-#     function=chunk_and_embed,
-#     function_return=['embedded_documents'],
-#     function_kwargs={
-#         "cleaned_documents": '${cleanDocuments.cleaned_documents}'
-#     }
-   
+# # data_pipeline.add_function_step(
+# #     name="load_to_mongodb",
+# #     function=load_to_mongodb,
+# #     function_kwargs={
+# #         "documents": "{{crawlAndIngest.output.documents}}"
+# #     }
+# # )
+
+# data_pipeline.add_function_step(
+#     name="load_from_mongodb",
+#     function=fetch_all_data,
+#     # function_kwargs={
+#     #     "collection_name": "your_collection_name"
+#     # }
 # )
-# feature_pipeline.add_function_step(
-#     name="loadToVectorDB",
+
+# data_pipeline.add_function_step(
+#     name="clean_documents",
+#     function=clean_documents,
+#     function_kwargs={
+#         "documents": "{{load_from_mongodb.output.documents}}"
+#     }
+# )
+
+# data_pipeline.add_function_step(
+#     name="chunk_and_embed",
+#     function=chunk_and_embed,
+#     function_kwargs={
+#         "cleaned_documents": "{{clean_documents.output.cleaned_documents}}"
+#     }
+# )
+
+# data_pipeline.add_function_step(
+#     name="load_to_vector_db",
 #     function=load_to_vector_db,
 #     function_kwargs={
-#         "embedded_documents": '${chunkAndEmbed.embedded_documents}'
+#         "embedded_documents": "{{chunk_and_embed.output.embedded_documents}}"
 #     }
-   
 # )
-# feature_pipeline.set_default_execution_queue("default")
-# feature_pipeline.start_locally()
 
-
-
+# # Run the pipeline
+# data_pipeline.set_default_execution_queue("default")
+# data_pipeline.start_locally()

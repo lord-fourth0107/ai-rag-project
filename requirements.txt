@@ -1,4 +1,5 @@
 tempfile
+beautifulsoup4
 selenium
 loguru
 opik
@@ -19,4 +20,3 @@ concurrent.futures
 threading
 typing_extensions
 tqdm
-bs4

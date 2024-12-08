@@ -2,7 +2,7 @@ import gradio as gr
 import requests
 
 # Define the backend URL
-BACKEND_URL = "http://127.0.0.1:5000/getAnswer"  
+BACKEND_URL = "http://127.0.0.1:5303/getAnswer"  
 
 # Prepopulated questions
 QUESTIONS = [
@@ -24,17 +24,26 @@ def fetch_answer(question):
         return f"Error fetching the response: {e}"
 
 # Build the Gradio interface
-with gr.Blocks() as app:
-    gr.Markdown("# Question Answering App")
-    gr.Markdown("Select a question from the dropdown below and get an answer from the backend.")
 
-    with gr.Row():
-        question_dropdown = gr.Dropdown(QUESTIONS, label="Select a Question")
-        submit_button = gr.Button("Get Answer")
-
-    output_text = gr.Textbox(label="Response", lines=5, interactive=False)
-
-    submit_button.click(fetch_answer, inputs=question_dropdown, outputs=output_text)
 
 # Launch the app
-app.launch()
+def pre_launch():
+  
+
+    with gr.Blocks() as applet:
+            pass
+            gr.Markdown("# Question Answering App")
+            gr.Markdown("Select a question from the dropdown below and get an answer from the backend.")
+
+            with gr.Row():
+                question_dropdown = gr.Dropdown(QUESTIONS, label="Select a Question")
+                submit_button = gr.Button("Get Answer")
+
+            output_text = gr.Textbox(label="Response", lines=5, interactive=False)
+
+            submit_button.click(fetch_answer, inputs=question_dropdown, outputs=output_text)
+    applet.launch()
+
+
+def launch_gradio_app():
+    pre_launch()

@@ -52,7 +52,7 @@ def chunk_and_embed(
 
     return embedded_chunks
 
-@PipelineDecorator.pipeline(name="embedAndLoad",project="ROS-RAG",version="1.0",add_pipeline_tags=["feature_extraction"])
+# @PipelineDecorator.component(name="embedAndLoad")
 def embed_and_load():
     results = query_data_warehouse()
     cleanded_documents = clean_documents(results)

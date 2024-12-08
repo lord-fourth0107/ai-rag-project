@@ -15,6 +15,8 @@ from clearml import PipelineDecorator, Task
 #     task_name="Query Data Warehouse",
 #     task_type=Task.TaskTypes.data_processing
 # )
+
+# @PipelineDecorator.component(name="queryDataWarehouse")
 def query_data_warehouse():
     results = fetch_all_data()
 
