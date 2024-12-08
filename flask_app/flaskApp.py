@@ -17,7 +17,7 @@ def index():
     client = Client(
     host='http://localhost:11434',
     )
-    response = ollama.chat(model='hf.co/nsh22/ROS-gguf', messages=[
+    response = ollama.chat(model='llama3.1:8b', messages=[
         {
             'role': 'user',
             'content': query,
