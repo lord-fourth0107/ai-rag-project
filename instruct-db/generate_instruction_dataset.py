@@ -4,25 +4,27 @@ from typing_extensions import Annotated
 # from zenml import ArtifactConfig, get_step_context, step
 
 from models.instruct_db import generation
-from models.instruct_db.dataset import DatasetType, PreferenceTrainTestSplit
+from models.instruct_db.dataset import DatasetType, InstructTrainTestSplit
 from models.rag_base.prompt import GenerateDatasetSamplesPrompt
 from models.dataCategory import DataCategory
 
 
 # @step
-def generate_preference_dataset(
+def generate_intruction_dataset(
     prompts: Annotated[dict[DataCategory, list[GenerateDatasetSamplesPrompt]], "prompts"],
     test_split_size: Annotated[float, "test_split_size"],
     mock: Annotated[bool, "mock_generation"] = False,
-):
-    dataset_generator = generation.get_dataset_generator(DatasetType.PREFERENCE)
+) :
+    dataset_generator = generation.get_dataset_generator(DatasetType.INSTRUCTION)
     datasets = dataset_generator.generate(prompts, test_size=test_split_size, mock=mock)
 
+    # step_context = get_step_context()
+    # step_context.add_output_metadata(output_name="instruct_datasets", metadata=_get_metadata_instruct_dataset(datasets))
 
     return datasets
 
 
-def _get_metadata_preference_dataset(datasets: PreferenceTrainTestSplit) -> dict[str, Any]:
+def _get_metadata_instruct_dataset(datasets: InstructTrainTestSplit) -> dict[str, Any]:
     instruct_dataset_categories = list(datasets.train.keys())
     train_num_samples = {
         category: instruct_dataset.num_samples for category, instruct_dataset in datasets.train.items()
