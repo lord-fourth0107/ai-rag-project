@@ -6,10 +6,31 @@ from .base import RAGStep
 from .prompt_template import QueryExpansionTemplate
 
 
+# The `QueryExpansion` class defines a method `generate` that expands a given query using a template
+# and a language model.
 class QueryExpansion(RAGStep):
 
     @opik.track(name="QueryExpansion.generate")
+       
     def generate(self, query: Query, expand_to_n: int,*args, **kwargs) -> list[Query]:
+        """
+        The `generate` function takes a query and expands it into multiple related queries using a
+        language model, returning a list of Query objects.
+        
+        :param query: The `query` parameter is the input query for which you want to generate query
+        expansions. It is of type `Query`, which is likely a data structure representing a search query
+        :type query: Query
+        :param expand_to_n: The `expand_to_n` parameter in the `generate` method specifies the number of
+        queries to generate as expansions of the input query. It determines how many additional queries
+        will be created based on the input query. The method will generate a list of `expand_to_n`
+        queries, including the original input
+        :type expand_to_n: int
+        :return: The `generate` method returns a list of Query objects. The method takes a Query object
+        as input, along with an integer `expand_to_n` specifying how many expanded queries to generate.
+        It then generates additional queries based on the input query using a model and template, and
+        returns a list containing the original query and the expanded queries.
+        """
+
         assert expand_to_n > 0, "expand_to_n must be greater than 0"
         if self._mock:
             return [query for _ in range(expand_to_n)]
