@@ -5,20 +5,16 @@ from loguru import logger
 #from models.documentModels import UserDocument
 from typing_extensions import Annotated
 from tqdm import tqdm
-# from clearmlSetup import PipelineDecorator
-# task = Task.init(
-#     project_name="My Project",
-#     task_name="Data Collection",
-#     task_type=Task.TaskTypes.data_processing
-# )
-# @PipelineDecorator.component(name="get_links",output_name="links")
+from clearml.automation import PipelineDecorator, PipelineController
+
+@PipelineDecorator.component(name="getlinks",execution_queue="default")
 def get_links(filePath:str) -> list[str]:
     links = []
     with open(filePath) as f:
         for line in f:
             links.append(line.strip())
     return links
-# @PipelineDecorator.component(name="crawl_links",)
+@PipelineDecorator.component(name="crawlAndIngest",execution_queue="default")
 def crawl_links( links: list[str]) -> Annotated[list[str], "crawled_links"]:
     dispatcher = CrawlerDispatcher.build().register_github().register_medium().register_youtube()#.register_linkedin()
 
@@ -49,3 +45,8 @@ def _crawl_link(dispatcher: CrawlerDispatcher, link: str) -> tuple[bool, str]:
     except Exception as e:
         logger.error(f"An error occurred while crawling: {str(e)}")
         return (False, crawler_domain)
+@PipelineDecorator.pipeline(name="ingest",project="ROS-RAG",version="1.0",add_pipeline_tags=["data_sourcing","raw_data_crawling_and_ingestion"])
+def ingest(filePath:str):
+    links = get_links(filePath)
+    crawl_links(links)
+    
