@@ -41,7 +41,8 @@ This sets up the RAG model and code to run together and the gradio app can be la
 
 ### Docker Compose 
 
-![image](https://github.com/user-attachments/assets/311fb142-2de2-4c6a-b65f-485d8e19498d)
+![image](https://github.com/user-attachments/assets/14645f5d-e0d1-4854-a124-1796c0032468)
+
 
 ### Gradio app results
 
@@ -60,7 +61,15 @@ The below submission contains the screenshots of the question and answers in Gra
 ```
 https://drive.google.com/file/d/1RBNVO0tswMs-vpi1GFG18rR7a-RVtXdu/view?usp=drive_link
 ```
+
+
 Difference: With Context enhanced prompt the response generated is more latest as it contains instructions for wide range of OS while without context we have response only for Ubuntu for which ROS was first developed
+
+### Instruction Datatset In Hugging Face
+![image](https://github.com/user-attachments/assets/d863c6fd-cf30-4f14-8b52-c72106007eba)
+
+
+
 ---------------------------------------------------------------------------------------------------------------------------------------
 ## How to check for data in mongoDB
 

@@ -1,7 +1,13 @@
 # Use the official Python base image
-FROM python:3.12.4-alpine3.19
+FROM python:3.12-alpine
 
-
+# Install build dependencies
+RUN apk add --no-cache \
+    build-base \
+    gfortran \
+    libgfortran \
+    openblas-dev \
+    lapack-dev
 # Set the working directory in the container
 WORKDIR /app
 
