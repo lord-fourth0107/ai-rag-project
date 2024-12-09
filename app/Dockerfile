@@ -1,20 +1,11 @@
-# Start with a base image
-FROM python:3.9-slim
+# Start with a lightweight base image
+FROM python:3.12.6-slim
 
-# Set the working directory
+# Set the working directory inside the container
 WORKDIR /app
+COPY requirements.txt /app/
+# Copy a basic script to the container
+RUN pip install -r /app/requirements.txt
 
-# Copy requirements file (if present)
-# COPY requirements.txt .
-
-# Install any dependencies (uncomment when ready)
-# RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy the current directory contents into the container (optional)
-# COPY . .
-
-# Expose a port (optional, depending on app needs)
-# EXPOSE 5000
-
-# Command to run the application (adjust accordingly)
-CMD ["python", "dummy.py"]
+# Run the application when the container starts
+CMD ["python", "/app/app.py"]
