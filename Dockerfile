@@ -1,5 +1,6 @@
 # Use the official Python base image
-FROM python:3.9
+FROM python:3.12.4-alpine3.19
+
 
 # Set the working directory in the container
 WORKDIR /app
@@ -8,7 +9,10 @@ WORKDIR /app
 COPY requirements.txt .
 
 # Install the Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip
+RUN pip install  -r requirements.txt
+
+#RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application code to the container
 COPY . .
@@ -16,7 +20,6 @@ COPY . .
 # Expose the port that your application will be running on
 EXPOSE 5303
 EXPOSE 7860
-
 
 # Start the application
 CMD ["python", "app.py"]
