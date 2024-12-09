@@ -55,6 +55,11 @@ The below submission contains the screenshots of the question and answers in Gra
 
 <img width="1440" alt="Screenshot 2024-12-08 at 8 12 26 PM" src="https://github.com/user-attachments/assets/067d41de-8729-48be-875e-2543dfad601d">
 
+### Google drive link for the video of inference pipeline is 
+
+```
+https://drive.google.com/file/d/1RBNVO0tswMs-vpi1GFG18rR7a-RVtXdu/view?usp=drive_link
+```
 Difference: With Context enhanced prompt the response generated is more latest as it contains instructions for wide range of OS while without context we have response only for Ubuntu for which ROS was first developed
 ---------------------------------------------------------------------------------------------------------------------------------------
 ## How to check for data in mongoDB
