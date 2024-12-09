@@ -28,7 +28,8 @@ services:
     ports:
       - "8000:8000"  # Expose your application port
       - "5303:5303"
-
+      - "7860:7860"
+    platform: linux/arm64
     volumes:
       - /Users/sreeharshnamani/Downloads/Assignments_NYU/ai_rag:/app
     environment:
