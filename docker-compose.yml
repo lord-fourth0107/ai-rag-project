@@ -22,19 +22,22 @@ services:
 
 
   app:
-    build: /Users/sreeharshnamani/Downloads/Assignments_NYU/ai_rag/app  # Make sure to have a Dockerfile in the 'app' directory for configuring your Python environment
-    container_name: app
+    build: 
+      context: /Users/sreeharshnamani/Downloads/Assignments_NYU/ai_rag/app
+      dockerfile: Dockerfile
     ports:
       - "8000:8000"  # Expose your application port
+      - "5303:5303"
+
     volumes:
-      - /Users/sreeharshnamani/Downloads/Assignments_NYU/ai_rag/app:/app
+      - /Users/sreeharshnamani/Downloads/Assignments_NYU/ai_rag:/app
     environment:
       - PYTHONUNBUFFERED=1
       - HUGGINGFACE_HUB_API_TOKEN=<your_huggingface_token>  # Replace or set via an env variable for security
-    depends_on:
-      - mongodb
-      - qdrant
-      # - clearml-apiserver
+    # depends_on:
+    #   - mongodb
+    #   - qdrant
+    #   # - clearml-apiserver
 
   mongodb:
     image: mongo:6.0
@@ -59,7 +62,7 @@ services:
     image: ollama/ollama:latest  # Replace with the correct image tag if different
     container_name: ollama_container
     ports:
-      - "11000:8000"  # Expose the port as required by the application
+      - "11000:11000"  # Expose the port as required by the application
     
     restart: unless-stopped
 

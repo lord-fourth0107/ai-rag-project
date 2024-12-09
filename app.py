@@ -9,10 +9,7 @@ from settings import RUN_MODE
 from clearml.automation.controller import PipelineDecorator
 from clearml import PipelineController
 from clearml import Task
-pipelinetask = Task.init(
-            project_name='ROS-RAG', 
-            task_name='RAG-Pipeline',
-        )
+
 # @PipelineDecorator.component( cache=True, task_type=TaskTypes.data_processing)
 def data_ingestion(filePath:str):
     extraction_task = Task.create(
@@ -63,6 +60,10 @@ def pipeline(filePath:str):
     launch_gradio_app()
 if __name__ == "__main__":
     if(RUN_MODE == "CLEARML"):
+        pipelinetask = Task.init(
+            project_name='ROS-RAG', 
+            task_name='RAG-Pipeline',
+        )
         PipelineDecorator.set_default_execution_queue("default")
         PipelineDecorator.debug_pipeline()
         pipeline(URL_FILE_PATH)
@@ -105,7 +106,3 @@ if __name__ == "__main__":
         pipeline(URL_FILE_PATH)
     
     
-
-
-
-
