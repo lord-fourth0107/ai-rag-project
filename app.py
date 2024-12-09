@@ -12,43 +12,50 @@ from clearml import Task
 
 # @PipelineDecorator.component( cache=True, task_type=TaskTypes.data_processing)
 def data_ingestion(filePath:str):
-    extraction_task = Task.create(
-            project_name='ROS-RAG',
-            task_name='Data Extraction',
-            # parent=pipelinetask,
-    )
-    ingest_module = importlib.import_module('steps.crawl')
-    ingest_module.ingest(filePath)
+    if(RUN_MODE == "CLEARML"):
+        extraction_task = Task.create(
+                project_name='ROS-RAG',
+                task_name='Data Extraction',
+                # parent=pipelinetask,
+        )
+        ingest_module = importlib.import_module('steps.crawl')
+        ingest_module.ingest(filePath)
+    ingest(filePath)
 # @PipelineDecorator.component(name="featureExtraction",cache=True, task_type=TaskTypes.custom)
 def feature_extraction():
-   feature_extraction_task = Task.create(
-            project_name='ROS-RAG',
-            task_name='Feature Extraction',
-            # parent=pipelinetask,        
-   )
-   feature_extraction_module = importlib.import_module('steps.feature')
-   feature_extraction_module.embed_and_load()
+   if(RUN_MODE == "CLEARML"):
+    feature_extraction_task = Task.create(
+                project_name='ROS-RAG',
+                task_name='Feature Extraction',
+                # parent=pipelinetask,        
+    )
+    feature_extraction_module = importlib.import_module('steps.feature')
+    feature_extraction_module.embed_and_load()
+   embed_and_load()
 
 # @PipelineDecorator.component(name="launch_flask_app",task_type=TaskTypes.custom)
 def launch_flask_app():
-    launch_flask_app_task = Task.create(
-            project_name='ROS-RAG',
-            task_name='Flask App',
-            # parent=pipelinetask,
-    )
-    launch_flask_app_module = importlib.import_module('flask_app')
-    launch_flask_app_module.run_flask()
+    if(RUN_MODE == "CLEARML"):
+        launch_flask_app_task = Task.create(
+                project_name='ROS-RAG',
+                task_name='Flask App',
+                # parent=pipelinetask,
+        )
+        launch_flask_app_module = importlib.import_module('flask_app')
+        launch_flask_app_module.run_flask()
+    run_flask()
 
 # @PipelineDecorator.component(name="launch_gradio_app_call",task_type=TaskTypes.custom)
 def launch_gradio_app_call():
-    launch_gradio_app_task = Task.create(
-            project_name='ROS-RAG',
-            task_name='Gradio App',
-            # parent=pipelinetask,    
-    )
-    launch_gradio_app_module = importlib.import_module('gradio_applet') 
-    launch_gradio_app_module.gradio_app()
-
+    if(RUN_MODE == "CLEARML"):
+            launch_gradio_app_task = Task.create(
+                    project_name='ROS-RAG',
+                    task_name='Gradio App',
+                    # parent=pipelinetask,    
+            )
+            launch_gradio_app_module = importlib.import_module('gradio_applet') 
+            launch_gradio_app_module.gradio_app()
+    launch_gradio_app()
 # app = Flask(__name__)
 
 flask_thread = threading.Thread(target=launch_flask_app)
