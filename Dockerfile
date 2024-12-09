@@ -14,7 +14,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Expose the port that your application will be running on
-EXPOSE 5000
+EXPOSE 5303
+EXPOSE 7860
+
 
 # Start the application
 CMD ["python", "app.py"]
