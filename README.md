@@ -66,8 +66,9 @@ https://drive.google.com/file/d/1RBNVO0tswMs-vpi1GFG18rR7a-RVtXdu/view?usp=drive
 Difference: With Context enhanced prompt the response generated is more latest as it contains instructions for wide range of OS while without context we have response only for Ubuntu for which ROS was first developed
 
 ### Instruction Datatset In Hugging Face
+![image](https://github.com/user-attachments/assets/d863c6fd-cf30-4f14-8b52-c72106007eba)
 
-![image](https://github.com/user-attachments/assets/f493fcdc-e5be-41e2-96da-3dc4e5658983)
+
 
 ---------------------------------------------------------------------------------------------------------------------------------------
 ## How to check for data in mongoDB
